@@ -1,7 +1,10 @@
 # Ignore everything
+*.sln
 *.vcxproj
 *.filters
 *.exe
+*.cmake
+*CmakeCache.txt
 
 # Ignore CMAKE
 /cpp/CMakeFiles/*
