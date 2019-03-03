@@ -7,4 +7,4 @@
 *CmakeCache.txt
 
 # Ignore CMAKE
-/cpp/CMakeFiles/*
+/cpp/*
