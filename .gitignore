@@ -1,11 +1,7 @@
 # Ignore everything
-*
+*.vcxproj
+*.filters
+*.exe
 
-# Except these files
-!.gitignore
-!.txt
-!.md
-!.cpp
-!/cpp
-# Even if files are in subdirectories
-!*/
+# Ignore CMAKE
+/cpp/CMakeFiles/*
