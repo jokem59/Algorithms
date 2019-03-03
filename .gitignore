@@ -1,0 +1,11 @@
+# Ignore everything
+*
+
+# Except these files
+!.gitignore
+!.txt
+!.md
+!.cpp
+
+# Even if files are in subdirectories
+!*/
