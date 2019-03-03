@@ -6,6 +6,6 @@
 !.txt
 !.md
 !.cpp
-
+!/cpp
 # Even if files are in subdirectories
 !*/
