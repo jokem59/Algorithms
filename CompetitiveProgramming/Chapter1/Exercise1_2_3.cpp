@@ -1,43 +1,39 @@
 #include <string>
-#include <vector>
-#include <algorithm>
+#include <stdio.h>
+#include <iostream>
 
-double pi = 3.143.14159265358979323846264338327950288419;
-std::vector<std::string> week {"Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"};
+// UVa 00272 TEX Quotes
+std::string SampleInput272 = "\"To be or not to be,\" quoth the Bard, \"that\n"
+                    "is the question\".\n"
+                    "The programming contestant replied: \"I must disagree.\n"
+                    "To `C' or not to `C', that is The Question!\"";
+void replaceQuotes()
+{
+    bool first = true;
+    std::string input;
 
-void printPi(int n) {
-    printf("%.*f\n", n, pi);
-    return;
-}
-
-int dayOfWeek(std::string day) {
-    for(int i = 0; i < week.size(); i++) {
-        if (day == week[i])
-            return i;
+    std::getline(std::cin, input);
+    for (int i = 0; i < input.size(); i++)
+    {
+        if (input[i] == '"') {
+            if (first) {
+                printf("%s", "``");
+                first = false;
+            }
+            else {
+                printf("%s", "''");
+                first = true;
+            }
+        }
+        else
+            printf("%c", input[i]);
     }
-    return -1;
-}
-
-void printDistinctSorted(std::vector<int> list) {
-    std::sort(list.begin(), list.end());
-    std::vector<int>::iterator it;
-    it = std::unique(list.begin(), list.end());
-    list.resize(std::distance(list.begin(), it));
-    for(int i = 0; i < list.size(); i++) {
-        printf("%d ", list[i]);
-    }
-    return;
-}
-
-void orderBirthdates(std::vector<int>& birthdates) {
-    
-
     return;
 }
 
 int main() {
 
-    printPi(5);
+    replaceQuotes();
 
     return 0;
 }
