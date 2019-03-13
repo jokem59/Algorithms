@@ -6,5 +6,15 @@
 *.cmake
 *CmakeCache.txt
 
+# Emacs related ignores
+*~
+\#*\#
+/.emacs.desktop
+/.emacs.desktop.lock
+*.elc
+auto-save-list
+tramp
+.\#*
+
 # Ignore CMAKE
 /cpp/*
