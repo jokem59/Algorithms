@@ -5,6 +5,9 @@
 *.exe
 *.cmake
 *CmakeCache.txt
+*\#*\#
+*.\#*
+*~
 
 # Ignore CMAKE
 /cpp/*
