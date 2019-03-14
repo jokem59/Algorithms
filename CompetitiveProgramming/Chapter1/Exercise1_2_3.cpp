@@ -3,37 +3,50 @@
 #include <iostream>
 
 // UVa 00272 TEX Quotes
-std::string SampleInput272 = "\"To be or not to be,\" quoth the Bard, \"that\n"
-                    "is the question\".\n"
-                    "The programming contestant replied: \"I must disagree.\n"
-                    "To `C' or not to `C', that is The Question!\"";
 void replaceQuotes()
 {
     bool first = true;
     std::string input;
 
-    std::getline(std::cin, input);
-    for (int i = 0; i < input.size(); i++)
-    {
-        if (input[i] == '"') {
-            if (first) {
-                printf("%s", "``");
-                first = false;
+    while (!std::getline(std::cin, input).eof()) {
+        for (int i = 0; i < input.size(); i++)
+        {
+            if (input[i] == '"') {
+                if (first) {
+                    printf("``");
+                    first = false;
+                }
+                else {
+                    printf("''");
+                    first = true;
+                }
             }
-            else {
-                printf("%s", "''");
-                first = true;
-            }
+            else
+                printf("%c", input[i]);
         }
-        else
-            printf("%c", input[i]);
+        printf("\n"); // std::getline uses \n as delimiter so this adds new lines back in
     }
+
     return;
 }
 
-int main() {
+// UVa 01124 Celebrity Jeopardy
+void celebJeopardy()
+{
+    std::string input;
 
-    replaceQuotes();
+    while (!std::getline(std::cin, input).eof()) {
+        for (int i = 0; i < input.size(); i++) {
+            printf("%c", input[i]);
+        }
+        printf("\n");
+    }
+}
+
+int main() {
+    std::ios_base::sync_with_stdio(false);  // std::cin now faster than scanf
+
+    celebJeopardy();
 
     return 0;
 }
