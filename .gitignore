@@ -5,9 +5,8 @@
 *.exe
 *.cmake
 *CmakeCache.txt
-*\#*\#
-*.\#*
-*~
+*.ilk
+*.pdb
 
 # Emacs related ignores
 *~
