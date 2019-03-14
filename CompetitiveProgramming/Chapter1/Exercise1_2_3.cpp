@@ -86,9 +86,49 @@ void combinationLock()
     return;
 }
 
+// UVa 11044 Searching for Nessy
+void findNessy() {
+    int numCases;
+    scanf("%d", &numCases);
+
+    while (numCases > 0) {
+        int row, col;
+        scanf("%d %d", &row, &col);
+
+        // integer division always gives us min number of sonar for row and col
+        printf("%d\n", (row / 3) * (col / 3));
+        numCases--;
+    }
+    return;
+}
+
+// UVa 11172 Relational Operators
+void relationalOperators() {
+    int numCases;
+    scanf("%d", &numCases);
+
+    for (; numCases > 0; numCases--) {
+        int first, second;
+        scanf("%d %d", &first, &second);
+        if (first > second)
+            printf("%c\n", '>');
+        if (first < second)
+            printf("%c\n", '<');
+        if (first == second)
+            printf("%c\n", '=');
+    }
+
+    return;
+}
+
+// UVa 11498 Division of Nlogonia
+void divisionNlogonia() {
+
+}
+
 int main() {
     std::ios_base::sync_with_stdio(false);  // std::cin now faster than scanf
 
-    combinationLock();
+    relationalOperators();
     return 0;
 }
