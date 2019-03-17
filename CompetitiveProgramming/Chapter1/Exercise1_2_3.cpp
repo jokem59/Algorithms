@@ -261,13 +261,71 @@ void eventPlanning() {
 
 // UVa 11799 Horror Dash
 void horrorDash() {
+    // first line of input contains number of test cases
+    int numCases, chasers, curSpeed, maxSpeed;
+    scanf("%d", &numCases);
 
+    for (int i = 0; i < numCases; i++) {
+        maxSpeed = 0;
+        scanf("%d", &chasers);
+        for (int j = 0; j < chasers; j++) {
+            scanf("%d", &curSpeed);
+            maxSpeed = curSpeed > maxSpeed ? curSpeed : maxSpeed;
+        }
+
+        printf("Case %d: %d\n", (i + 1), maxSpeed);
+    }
+    return;
+}
+
+// UVa 00573 The Snail
+void theSnail() {
+    // height of well, distance snail can climb in ft, distance snail slides down at night in ft, fatigue as %
+    int wellHeight;
+    float climbDistance, slideDistance, fatigue;
+
+    // fatigue is always calculated from first day's climbing distance - aka climbDistance's initial value
+    while (scanf("%d %f %f %f", &wellHeight, &climbDistance, &slideDistance, &fatigue)) {
+        if (wellHeight == 0)
+            break;
+
+        bool success = false;
+        int day = 1;
+        float fatigueDistance = (fatigue / 100.0) * climbDistance;
+        float curHeight = 0.0;
+        float curClimbDistance = climbDistance;
+        while (curHeight < wellHeight) {
+            curHeight += curClimbDistance;
+            if (curHeight > wellHeight) {
+                success = true;
+                break;
+            }
+
+            curHeight -= slideDistance;
+
+            if (curHeight < 0.0) {
+                success = false;
+                break;
+            }
+
+            curClimbDistance -= fatigueDistance;
+            if (curClimbDistance < 0.0)
+                curClimbDistance = 0.0;
+            
+            day++;
+        }
+
+        if (success)
+            printf("success on day %d\n", day);
+        else
+            printf("failure on day %d\n", day);
+    }
     return;
 }
 
 int main() {
     std::ios_base::sync_with_stdio(false);  // std::cin now faster than scanf
 
-    horrorDash();
+    theSnail();
     return 0;
 }
