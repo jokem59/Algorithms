@@ -257,7 +257,7 @@ void eventPlanning() {
             printf("%d\n", cost);
     }
     return;
-}
+ }
 
 // UVa 11799 Horror Dash
 void horrorDash() {
@@ -289,18 +289,6 @@ void theSnail() {
         if (wellHeight == 0)
             break;
 
-        bool success = false;
-        int day = 1;
-        float fatigueDistance = (fatigue / 100.0) * climbDistance;
-        float curHeight = 0.0;
-        float curClimbDistance = climbDistance;
-        while (curHeight < wellHeight) {
-            curHeight += curClimbDistance;
-            if (curHeight > wellHeight) {
-                success = true;
-                break;
-            }
-
             curHeight -= slideDistance;
 
             if (curHeight < 0.0) {
@@ -311,7 +299,7 @@ void theSnail() {
             curClimbDistance -= fatigueDistance;
             if (curClimbDistance < 0.0)
                 curClimbDistance = 0.0;
-            
+
             day++;
         }
 
