@@ -75,7 +75,7 @@ void greyCodes() {
 // UVa 10038 Jolly Jumpers
 void jollyJumpers() {
     int numInts;
-    while (scanf("%d", &numInts)) {
+    while (scanf("%d", &numInts) > 0) {
         std::vector<int> arr;
         int x;
         while (numInts) {
@@ -87,7 +87,7 @@ void jollyJumpers() {
 
         std::sort(arr.begin(), arr.end());
         bool isJJ = false;
-        if (arr.size() != 1) {
+        if (arr.size() > 1) {
             for (int i = 0; i < arr.size() - 1; i++) {
                 if ((arr[i] - arr[i + 1]) != -1) {
                     isJJ = false;
