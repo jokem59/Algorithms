@@ -110,7 +110,7 @@ void jollyJumpers() {
 }
 
 // UVa 11340 Newspaper
-// Why do I have to include newlines?
+// Why do I have to include newlines, seems to only happen when grabbing characters
 // reimplement using iostream
 void newsPaper() {
     int numTests, numPaid, numLines, cents, numChars;
