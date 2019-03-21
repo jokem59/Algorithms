@@ -73,6 +73,8 @@ void greyCodes() {
 }
 
 // UVa 10038 Jolly Jumpers
+// revisit - 4 1 4 3 5 -> 1 3 4 5 -> is jolly, my approach doesn't catch it
+// rewrite using cin and stuff
 void jollyJumpers() {
     int numInts;
     while (scanf("%d", &numInts) > 0) {
@@ -89,12 +91,13 @@ void jollyJumpers() {
         bool isJJ = false;
         if (arr.size() > 1) {
             for (int i = 0; i < arr.size() - 1; i++) {
-                if ((arr[i] - arr[i + 1]) != -1) {
+                if ((arr[i] - arr[i + 1]) == -1 || (arr[i] - arr[i + 1]) == 1) {
+                    isJJ = true;
+                }
+                else {
                     isJJ = false;
                     break;
                 }
-                else
-                    isJJ = true;
             }
         }
         else
