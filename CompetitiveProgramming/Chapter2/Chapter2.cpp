@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <string>
 #include <cstdio>
 #include <iostream>
 #include <vector>
@@ -116,31 +117,41 @@ void jollyJumpers() {
 }
 
 // UVa 11340 Newspaper
-// Why do I have to include newlines, seems to only happen when grabbing characters
-// reimplement using iostream
+// Max value: k = 100, M = 150000, line.size() = 10000 -> 100 * 150000 * 10000 = 150,000,000,000
 void newsPaper() {
-    int Case, i, n, len;
-    double sum, c, cost[260];
-    char s[10005], ch;
-    std::cin >> Case;
-    while (Case--) {
-        for (i=0;i<=255;i++)
-            cost[i] = 0.0;
-        scanf("%d", &n);
-        while (n--) {
-            scanf(" %c %lf",&ch,&c);
-      //      printf("%c %d",ch,c);
-            cost[ch+128] = c;
+    int numTests, numVals, charVal, numLines;
+    char ch;
+    long long total;
+
+    std::cin >> numTests;
+
+    while(numTests) {
+        std::unordered_map<char, int> m;
+        std::string line;
+        std::cin >> numVals;
+
+        while(numVals) {
+            std::cin >> ch >> charVal;
+            m[ch] = charVal;
+            numVals--;
         }
-        scanf("%d", &n); getchar();
-        sum = 0;
-        while (n--) {
-            gets(s);
-            len = strlen(s);
-            for (i=0;i<len;i++)
-                sum += cost[s[i]+128];
+
+        total = 0;
+        std::cin >> numLines;
+        std::getline(std::cin, line);  // need this because after cin on numLines, we're still on that line, this consumes the newline character following numLines
+        while(numLines) {
+            std::getline(std::cin, line);
+
+            for(int i = 0; i < line.size(); i++) {
+                if(m.find(line[i]) != m.end())
+                    total += m[line[i]];
+            }
+            numLines--;
         }
-        printf("%.2lf$\n",sum/100.0);
+
+        printf("%lld.%02lld$\n", total/100,  total%100);
+
+        numTests--;
     }
 
     return;
