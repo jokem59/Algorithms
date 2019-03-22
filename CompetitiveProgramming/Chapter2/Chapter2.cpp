@@ -1,8 +1,10 @@
 #include <stdio.h>
+#include <cstdio>
 #include <iostream>
 #include <vector>
 #include <algorithm>
 #include <unordered_map>
+#include <cmath>
 
 // Exercise 2.2.2 Bit manipulation tricks
 
@@ -79,6 +81,7 @@ void jollyJumpers() {
     int numInts;
     while (scanf("%d", &numInts) > 0) {
         std::vector<int> arr;
+        std::vector<int> diff;
         int x;
         while (numInts) {
             scanf("%d", &x);
@@ -87,20 +90,20 @@ void jollyJumpers() {
             numInts--;
         }
 
-        std::sort(arr.begin(), arr.end());
-        bool isJJ = false;
+        bool isJJ = true;
         if (arr.size() > 1) {
             for (int i = 0; i < arr.size() - 1; i++) {
-                if ((arr[i] - arr[i + 1]) == -1 || (arr[i] - arr[i + 1]) == 1) {
-                    isJJ = true;
-                }
-                else {
-                    isJJ = false;
-                    break;
-                }
+                diff.push_back(abs(arr[i] - arr[i+1]));
             }
         }
-        else
+
+        std::sort(diff.begin(), diff.end());
+        for (int i = 0; i < diff.size(); i++) {
+            if (diff[i] != i+1)
+                isJJ = false;
+        }
+
+        if (arr.size() == 1)
             isJJ = true;
 
         if (isJJ)
@@ -116,49 +119,35 @@ void jollyJumpers() {
 // Why do I have to include newlines, seems to only happen when grabbing characters
 // reimplement using iostream
 void newsPaper() {
-    int numTests, numPaid, numLines, cents, numChars;
-    float total;
-    scanf("%d", &numTests);
-
-    while (numTests) {
-        scanf("%d\n", &numPaid);
-        char ch;
-        std::unordered_map<char, int> vals;
-        printf("numPaid: %d\n", numPaid);
-        while (numPaid) {
-            scanf("%c %d\n", &ch, &cents);
-            printf("char: %c | cents: %d\n", ch, cents);
-            vals[ch] = cents;
-            numPaid--;
+    int Case, i, n, len;
+    double sum, c, cost[260];
+    char s[10005], ch;
+    std::cin >> Case;
+    while (Case--) {
+        for (i=0;i<=255;i++)
+            cost[i] = 0.0;
+        scanf("%d", &n);
+        while (n--) {
+            scanf(" %c %lf",&ch,&c);
+      //      printf("%c %d",ch,c);
+            cost[ch+128] = c;
         }
-
-        char line[10000];
-        scanf("%d\n", &numLines);
-
-        total = 0.0;
-        printf("numLines: %d\n", numLines);
-        while (numLines) {
-            scanf("%[^\n]", line);
-
-            for (int i = 0;; i++) {
-                if (line[i] == '\0')
-                    break;
-                printf("%c", line[i]);
-                if (vals.find(line[i]) != vals.end()) {
-                    printf("Matched: %c\n", line[i]);
-                    total += vals[line[i]];
-                }
-            }
-            numLines--;
+        scanf("%d", &n); getchar();
+        sum = 0;
+        while (n--) {
+            gets(s);
+            len = strlen(s);
+            for (i=0;i<len;i++)
+                sum += cost[s[i]+128];
         }
-        printf("%.2f$", total / 100.0);
-        numTests--;
+        printf("%.2lf$\n",sum/100.0);
     }
 
     return;
 }
 
+
 int main() {
-    jollyJumpers();
+    newsPaper();
     return 0;
 }
