@@ -157,8 +157,47 @@ void newsPaper() {
     return;
 }
 
+void armyBuddies() {
+    int S, B;
+    //int left[100005], right[100005];
+    
+    while (1) {
+        std::cin >> S >> B;
+        
+        std::vector<int> left(S+1);
+        std::vector<int> right(S+1);
+        if (S == 0 && B == 0)
+            break;
+        
+        for (int i = 0; i < S + 1; i++) {
+            left[i] = i - 1;    // represent at index i, the left neighbor
+            right[i] = i + 1;   // represent at index i, the right neighbor
+        }
+        
+        int l ,r;
+        while (B) {
+            std::cin >> l >> r;
+            if (left[l] <= 0)
+                std::cout << "* ";
+            else
+                std::cout << left[l] << ' ';
+            if (right[r] > S)
+                std::cout << "*\n";
+            else
+                std::cout << right[r] << '\n';
+                
+            // This "trick" works because the input will never choose a range between "dead" soldiers
+            left[right[r]] = left[l];
+            right[left[l]] = right[r];
+            B--;
+        }
+        std::cout << "-\n";
+    }
+    return;
+}
 
 int main() {
+    std::ios::sync_with_stdio(false);
     newsPaper();
     return 0;
 }
