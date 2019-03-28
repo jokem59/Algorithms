@@ -160,20 +160,20 @@ void newsPaper() {
 void armyBuddies() {
     int S, B;
     //int left[100005], right[100005];
-    
+
     while (1) {
         std::cin >> S >> B;
-        
+
         std::vector<int> left(S+1);
         std::vector<int> right(S+1);
         if (S == 0 && B == 0)
             break;
-        
+
         for (int i = 0; i < S + 1; i++) {
             left[i] = i - 1;    // represent at index i, the left neighbor
             right[i] = i + 1;   // represent at index i, the right neighbor
         }
-        
+
         int l ,r;
         while (B) {
             std::cin >> l >> r;
@@ -185,7 +185,7 @@ void armyBuddies() {
                 std::cout << "*\n";
             else
                 std::cout << right[r] << '\n';
-                
+
             // This "trick" works because the input will never choose a range between "dead" soldiers
             left[right[r]] = left[l];
             right[left[l]] = right[r];
@@ -196,8 +196,118 @@ void armyBuddies() {
     return;
 }
 
+void print2DVector(std::vector<std::vector<char>>& arr) {
+    for (int i = 0; i < arr.size(); i++) {
+        for (int j = 0; j < arr[0].size(); j++) {
+            std::cout << arr[i][j];
+        }
+        std::cout << '\n';
+    }
+    return;
+}
+
+// Runtime complexity of check n[0][0] against all N[i][j] possibilities: (N - n) * (N - n) -> O(N^2 + n^2)
+// Runtime complexity of checking each element in n if n[0][0] matches something in N[i][j]
+//     n * n -> O(n^2)
+// Runtime complexity of the function: O((N^2 + n^2) * (n^2))
+int matchSquares(std::vector<std::vector<char>>& big, std::vector<std::vector<char>>& small) {
+    int count = 0;
+    int N = big.size();
+    int n = small.size();
+    char firstMatch = small[0][0];
+
+    for (int i = 0; i < N - n + 1; i++) {
+        for (int j = 0; j < N - n + 1; j++) {
+            if (firstMatch == big[i][j]) {
+                bool match = true;
+                for (int k = 0; k < n; k++) {
+                    for (int l = 0; l < n; l++) {
+                        if (small[k][l] != big[i+k][j+l]) {
+                            match = false;
+                            break;
+                        }
+                    }
+
+                    if (!match)
+                        break;
+                }
+                if (match) {
+                    // std::cout << "Matched on i: " << i << ", j: " << j << "\n";
+                    count++;
+                }
+            }
+        }
+    }
+
+    return count;
+}
+
+// Runtime complexity: n/2 * n/2 = O(n^2)
+void rotateSquare90Deg(std::vector<std::vector<char>>& small) {
+    int cycles = small.size() / 2;
+    int n = small.size();
+
+    // Outer loop controls which "ring" we're working on
+    for (int i = 0; i < cycles; i++) {
+        // Inner loop controls the position of the swaps
+        for (int j = i; j < n - i - 1; j++) {
+            char tmp = small[i][j];
+            small[i][j] = small[n-j-1][i];
+            small[n-j-1][i] = small[n-i-1][n-j-1];
+            small[n-i-1][n-j-1] = small[j][n-i-1];
+            small[j][n-i-1] = tmp;
+        }
+    }
+
+    return;
+}
+
+// UVa 10855 Rotated Square
+/*
+  Find number of times n is matched in N
+  - Rotate n x n matrix
+  - Find number of matches of n in N
+ */
+void rotatedSquare() {
+    int N, n;
+    while (1) {
+        //std::cout << "loop\n";
+        std::cin >> N >> n;
+        if (N == 0 && n == 0)
+            break;
+
+        std::vector<std::vector<char>> big(N, std::vector<char>(N, 'A'));
+        std::vector<std::vector<char>> small(n, std::vector<char>(n, 'A'));
+
+        for (int i = 0; i < N; i++) {
+            for (int j = 0; j < N; j++) {
+                std::cin >> big[i][j];
+            }
+        }
+        for (int i = 0; i < n; i++) {
+            for (int j = 0; j < n; j++) {
+                std::cin >> small[i][j];
+            }
+        }
+
+        // print2DVector(small);
+        // print2DVector(small);
+
+        std::vector<int> rotate(4, 0);
+        for (int i = 0; i < 4; i++) {
+            if (i != 0)
+                rotateSquare90Deg(small);
+            rotate[i] = matchSquares(big, small);
+        }
+
+        //std::cout << "end of loop\n";
+        std::cout << rotate[0] << ' ' << rotate[1] << ' ' << rotate[2] << ' ' << rotate[3] << '\n';
+    }
+    return;
+}
+
 int main() {
     std::ios::sync_with_stdio(false);
-    newsPaper();
+    rotatedSquare();
     return 0;
 }
