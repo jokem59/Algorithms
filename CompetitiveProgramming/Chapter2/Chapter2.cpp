@@ -306,8 +306,177 @@ void rotatedSquare() {
     return;
 }
 
+bool goUp(int& y, int& result, int& times, int target) {
+    if (target == result)
+        return true;
+    for (int i = 0; i < times / 2; i++) {
+        y++;
+        result++;
+        if (target == result)
+            return true;
+    }
+    times++;
+    return false;
+}
+
+bool goLeft(int& x, int& result, int& times, int target) {
+    if (target == result)
+        return true;
+    for (int i = 0; i < times / 2; i++) {
+        x--;
+        result++;
+        if (target == result)
+            return true;
+    }
+    times++;
+    return false;
+}
+
+bool goDown(int& y, int& result, int& times, int target) {
+    if (target == result)
+        return true;
+    for (int i = 0; i < times / 2; i++) {
+        y--;
+        result++;
+        if (target == result)
+            return true;
+    }
+    times++;
+    return false;
+}
+
+bool goRight(int& x, int& result, int& times, int target) {
+    if (target == result)
+        return true;
+    for (int i = 0; i < times / 2; i++) {
+        x++;
+        result++;
+        if (target == result)
+            return true;
+    }
+    times++;
+    return false;
+}
+
+// UVa 10920 Spiral Tap
+// Brute force by visiting each square = O(SZ^2) -> O(100000^2) -> O(10,000,000,000) -> ~10 seconds, too slow
+// Note pattern that every top right corner of each concentric sqaure is odd number (1, 3, 5, 7, 9...)
+void spiralTapBF() {
+    int sz, p, x, y;
+    while (1) {
+        std::cin >> sz >> p;
+        if (sz == 0 && p ==0)
+            break;
+
+        x = (sz / 2) + 1;
+        y = (sz / 2) + 1;
+
+        int times = 2;
+        int result = 1;
+        bool done = false;
+        while (1) {
+            done = goUp(y, result, times, p);
+            if (done)
+                break;
+            done = goLeft(x, result, times, p);
+            if (done)
+                break;
+            done = goDown(y, result, times, p);
+            if (done)
+                break;
+            done = goRight(x, result, times, p);
+            if (done)
+                break;
+        }
+
+        std::cout << "Line = " << y << ", column = " << x << '\n';
+    }
+    return;
+}
+
+// TODO: Need to account for x, y if size of sqaure is big, it will affect the x, y of the result!
+// SEE test case 7 16 - i'm currently solving assuming SZ = 5
+void spiralTap() {
+    int sz, x, y;
+    double p;
+    while (1) {
+        std::cin >> sz >> p;
+        if (sz == 0 && p == 0)
+            break;
+
+        double doubleLowerRange = sqrt(p);
+        int lowerRange = (unsigned int)doubleLowerRange % 2 == 0 ? (unsigned int)doubleLowerRange - 1 : (unsigned int)doubleLowerRange;
+
+        // std::cout << "LowerRange: " << lowerRange << '\n';
+
+        if (lowerRange == 1) {
+            x = sz / 2;
+            y = sz / 2;
+        } else {
+            x = lowerRange;
+            y = lowerRange;
+        }
+
+        unsigned int result = lowerRange * lowerRange;
+
+        // std::cout << "Target: " << (unsigned int)p << '\n';
+        // std::cout << "Result: " << result << '\n';
+
+        while (result != (unsigned int)p) {
+            // up one always
+            y++;
+            result++;
+
+            // left lowerRange times
+            if (p <= result + lowerRange) { // answer must be in this line
+                x -= (p - result);
+                result = result + (p - result);
+                break;
+            }
+            else {
+                x -= lowerRange;
+                result += lowerRange;
+            }
+
+            // down lowerRange + 1 times
+            if (p <= result + lowerRange + 1) {
+                y -= (p - result);
+                result = result + (p - result);
+                break;
+            }
+            else {
+                y -= lowerRange + 1;
+                result += lowerRange + 1;
+            }
+
+            // right lowerRange + 1 times
+            if (p <= result + lowerRange + 1) {
+                x += (p - result);
+                result = result + (p - result);
+                break;
+            }
+            else {
+                x += lowerRange + 1;
+                result += lowerRange + 1;
+            }
+
+            // up lowerRange + 1 time not including the next top right corner
+            if (p < result + lowerRange + 1) {
+                y += (p - result);
+                result = result + (p - result);
+                break;
+            } else { // should never get to this point
+                y += lowerRange + 1;
+                result += lowerRange + 1;
+            }
+        }
+        std::cout << "Line = " << y + 1 << ", column = " << x + 1 << '\n';
+    }
+    return;
+}
+
 int main() {
     std::ios::sync_with_stdio(false);
-    rotatedSquare();
+    spiralTap();
     return 0;
 }
