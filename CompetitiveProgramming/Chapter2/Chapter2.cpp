@@ -475,8 +475,72 @@ void spiralTap() {
     return;
 }
 
+int getSumOfVector(const std::vector<int>& v) {
+    int sum = 0;
+    for (int i = 0; i < v.size(); i++) {
+        sum += v[i];
+    }
+    return sum % 2;
+}
+
+void processGrid(std::vector<std::vector<int>>& g) {
+    std::vector<std::vector<int>> tmp = g;
+
+    for (int i = 0; i < 3; i++) {
+        for (int j = 0; j < 3; j++) {
+            int sum = 0;
+            if (i + 1 < 3)
+                sum += tmp[i+1][j];
+            if (i - 1 >= 0)
+                sum += tmp[i-1][j];
+            if (j + 1 < 3)
+                sum += tmp[i][j+1];
+            if (j - 1 >= 0)
+                sum += tmp[i][j-1];
+            g[i][j] = sum % 2;
+        }
+    }
+    return;
+}
+
+// UVa 11581 Grid Successors
+// TODO: CIN messing up somehwere with newlines, fix and proceed
+void gridSuccessors() {
+    int numCases, x, y, z;
+    std::vector<std::vector<int>> g(3, std::vector<int>(3, 0));
+    std::cin >> numCases;
+
+    for (int i = 0; i < numCases; i++) {
+        int index = 0;
+        int gridSum = 0;
+        for (int j = 0; j < 3; j++) {
+            std::cin >> x >> y >> z;
+            std::cout << x << ' ' << y << ' ' << z << '\n';
+            g[j][0] = x;
+            g[j][1] = y;
+            g[j][2] = z;
+        }
+
+        while (1) {
+            for (int k = 0; k < 3; k++) {
+                gridSum += getSumOfVector(g[k]);
+            }
+            std::cout << "gridSum = " << gridSum << '\n';
+            if (gridSum == 0)
+                break;
+
+            processGrid(g);
+
+            index++;
+        }
+        std::cout << index << '\n';
+    }
+
+    return;
+}
+
 int main() {
     std::ios::sync_with_stdio(false);
-    spiralTap();
+    gridSuccessors();
     return 0;
 }
