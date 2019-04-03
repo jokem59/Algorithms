@@ -395,7 +395,6 @@ void spiralTapBF() {
 }
 
 // TODO: Need to account for x, y if size of sqaure is big, it will affect the x, y of the result!
-// SEE test case 7 16 - i'm currently solving assuming SZ = 5
 void spiralTap() {
     int sz, x, y;
     double p;
@@ -409,13 +408,14 @@ void spiralTap() {
 
         // std::cout << "LowerRange: " << lowerRange << '\n';
 
-        if (lowerRange == 1) {
-            x = sz / 2;
-            y = sz / 2;
-        } else {
-            x = lowerRange;
-            y = lowerRange;
+        x = sz / 2;
+        y = sz / 2;
+        if (sz > 1) {
+            x += lowerRange / 2;
+            y += lowerRange / 2;
         }
+
+        // std::cout << "x: " << x << "y: " << y << '\n';
 
         unsigned int result = lowerRange * lowerRange;
 
@@ -470,7 +470,7 @@ void spiralTap() {
                 result += lowerRange + 1;
             }
         }
-        std::cout << "Line = " << y + 1 << ", column = " << x + 1 << '\n';
+        std::cout << "Line = " << y + 1 << ", column = " << x + 1 << '.' << '\n';
     }
     return;
 }
