@@ -480,7 +480,7 @@ int getSumOfVector(const std::vector<int>& v) {
     for (int i = 0; i < v.size(); i++) {
         sum += v[i];
     }
-    return sum % 2;
+    return sum;
 }
 
 void processGrid(std::vector<std::vector<int>>& g) {
@@ -504,28 +504,43 @@ void processGrid(std::vector<std::vector<int>>& g) {
 }
 
 // UVa 11581 Grid Successors
-// TODO: CIN messing up somehwere with newlines, fix and proceed
+// How to compute runtime for this??
 void gridSuccessors() {
     int numCases, x, y, z;
+    std::string line;
     std::vector<std::vector<int>> g(3, std::vector<int>(3, 0));
     std::cin >> numCases;
+    std::getline(std::cin, line);
 
     for (int i = 0; i < numCases; i++) {
+        std::getline(std::cin, line);
         int index = 0;
-        int gridSum = 0;
+
         for (int j = 0; j < 3; j++) {
-            std::cin >> x >> y >> z;
-            std::cout << x << ' ' << y << ' ' << z << '\n';
+            std::getline(std::cin, line);
+            x = (int)(line[0] - 48);
+            y = (int)(line[1] - 48);
+            z = (int)(line[2] - 48);
+            // std::cout << x << ' ' << y << ' ' << z << '\n';
             g[j][0] = x;
             g[j][1] = y;
             g[j][2] = z;
         }
 
         while (1) {
+            int gridSum = 0;
             for (int k = 0; k < 3; k++) {
                 gridSum += getSumOfVector(g[k]);
             }
-            std::cout << "gridSum = " << gridSum << '\n';
+
+            // for (int a = 0; a < 3; a++) {
+            //     for (int b = 0; b < 3; b++) {
+            //         std::cout << g[a][b] << ' ';
+            //     }
+            //     std::cout << '\n';
+            // }
+
+            // std::cout << "gridSum = " << gridSum << "\n\n";
             if (gridSum == 0)
                 break;
 
@@ -533,14 +548,73 @@ void gridSuccessors() {
 
             index++;
         }
-        std::cout << index << '\n';
+
+        std::cout << index - 1 << '\n';
     }
+
+    return;
+}
+
+// UVa 00146 ID Codes
+// Num inputs = n -> O(n)
+void idCodes() {
+    std::string line;
+    bool result;
+
+    while (1) {
+        std::getline(std::cin, line);
+
+        if (line == "#")
+            break;
+
+        result = std::next_permutation(line.begin(), line.end());
+        if (result)
+            std::cout << line << '\n';
+        else
+            std::cout << "No Successor\n";
+    }
+    return;
+}
+
+// UVa 10107 What is the Median?
+// O((N * Log N) * 10000)
+void whatIsMedian() {
+    std::vector<unsigned int> arr;
+    unsigned int median;
+    while (1) {
+        long long int num = -1;
+        std::cin >> num;
+
+        if (num < 0)
+            break;
+
+        arr.push_back(num);
+        std::sort(arr.begin(), arr.end());
+
+        if (arr.size() == 1) {
+            std::cout << arr[0] << '\n';
+            continue;
+        }
+
+        if (arr.size() % 2 == 1) {
+            median = arr[arr.size() / 2];
+        }
+        else {
+            median = (arr[arr.size() / 2] + arr[(arr.size() / 2) - 1]) / 2;
+        }
+        std::cout << median << '\n';
+    }
+    return;
+}
+
+// UVa 10258 Contest Scoreboard
+void contestScoreboard() {
 
     return;
 }
 
 int main() {
     std::ios::sync_with_stdio(false);
-    gridSuccessors();
+    contestScoreboard();
     return 0;
 }
