@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <sstream>
 #include <string>
 #include <cstdio>
 #include <iostream>
@@ -607,8 +608,45 @@ void whatIsMedian() {
     return;
 }
 
+std::vector<std::string> splitString(const std::string& s, char delimiter) {
+    std::vector<std::string> tokens;
+    std::string token;
+    std::istringstream tokenStream(s);
+    while (std::getline(tokenStream, token, delimiter)) {
+        tokens.push_back(token);
+    }
+    return tokens;
+}
+
 // UVa 10258 Contest Scoreboard
+// Such an ugly way to grab input =(
 void contestScoreboard() {
+    int numCases;
+    std::string line;
+    std::string::size_type sz;
+    std::cin >> numCases;
+    std::getline(std::cin, line);
+    std::getline(std::cin, line);
+
+    for (int i = 0; i < numCases; i++) {
+        int contestant, problem, time;
+        char status;
+        std::vector<std::string> tokens;
+        while (std::getline(std::cin, line)) {
+            if (line.size() == 0)
+                break;
+
+            tokens = splitString(line, ' ');
+            contestant = stoi(tokens[0], nullptr);
+            problem = stoi(tokens[1], nullptr);
+            time = stoi(tokens[2], nullptr);
+            status = tokens[3].c_str()[0];
+
+            std::cout << contestant << ":" << problem << ":" << time << ":" << status << '\n';
+        }
+
+        std::cout << '\n';
+    }
 
     return;
 }
