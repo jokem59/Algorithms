@@ -7,6 +7,7 @@
 #include <algorithm>
 #include <unordered_map>
 #include <cmath>
+#include <utility>
 
 // Exercise 2.2.2 Bit manipulation tricks
 
@@ -620,6 +621,27 @@ std::vector<std::string> splitString(const std::string& s, char delimiter) {
 
 // UVa 10258 Contest Scoreboard
 // Such an ugly way to grab input =(
+// Use a unordere_map, with key = Contestant, val = struct data
+
+struct Contestant {
+    int contestantNumber;
+    std::unordered_map<int, std::pair<int, bool>> solved;    // prob : { totalTime, solved }
+
+    Contestant() {}
+    Contestant(const Contestant& c2) { contestantNumber = c2.contestantNumber; solved = c2.solved; }
+    ~Contestant() {}
+};
+
+bool compareData(const Contestant& d1, const Contestant& d2) {
+
+    return false;
+}
+
+/* COSTLY MISTAKE _ LET THIS BE A LESSON OF NOT THINKING THROUGH SOLUTION BEFORE STARTING TO CODE
+   SPENT A FEW HOURS TRYING TO MAKE THIS SOLUTION WORK */
+
+// UVa 10258 Contest Scoreboard
+// Should've recognized SORT means VECTOR - can't sort an unordered_map =(
 void contestScoreboard() {
     int numCases;
     std::string line;
@@ -631,6 +653,8 @@ void contestScoreboard() {
     for (int i = 0; i < numCases; i++) {
         int contestant, problem, time;
         char status;
+
+        std::unordered_map<int, Contestant> m;
         std::vector<std::string> tokens;
         while (std::getline(std::cin, line)) {
             if (line.size() == 0)
@@ -641,8 +665,110 @@ void contestScoreboard() {
             problem = stoi(tokens[1], nullptr);
             time = stoi(tokens[2], nullptr);
             status = tokens[3].c_str()[0];
+            // std::cout << "Contestant: " << contestant << " Status: " << status << " Problem: " << problem << '\n';
 
-            std::cout << contestant << ":" << problem << ":" << time << ":" << status << '\n';
+            if (m.find(contestant) != m.end())
+            {
+                if (m[contestant].solved.find(problem) != m[contestant].solved.end())
+                {
+                    if (m[contestant].solved[problem].second == true)
+                    {
+                        // do nothing
+                    }
+                    else
+                    {
+                        if (status == 'I')
+                        {
+                            m[contestant].solved[problem].first += 20;
+                        }
+                        if (status == 'C')
+                        {
+                            //std::cout << "Previous Time: " << m[contestant].solved[problem].first
+                            //          << "New Time: " << m[contestant].solved[problem].first + time << '\n';
+                            m[contestant].solved[problem].first += time;
+                            m[contestant].solved[problem].second = true;
+                        }
+                        if (status != 'C' || status != 'I') {
+//                            std::cout << "Current Time: " << m[contestant].solved[problem].first << '\n';
+                        }
+                    }
+                }
+                // new entry problem entry
+                else
+                {
+                    //std::cout << "Adding new problem entry for " << problem << "\n";
+                    m[contestant].solved[problem] = std::make_pair(0, false);
+                    if (status == 'I'){
+                        m[contestant].solved[problem].first = 20;
+                        m[contestant].solved[problem].second = false;
+                    }
+                    if (status == 'C') {
+                        m[contestant].solved[problem].first = time;
+                        m[contestant].solved[problem].second = true;
+                    }
+                    if (status != 'I' || status != 'C') {
+                        // m[contestant].solved[problem] = std::make_pair(0, false);
+                    }
+                }
+            }
+            else // new contestant entry
+            {
+                m[contestant] = Contestant();
+                m[contestant].contestantNumber = contestant;
+                m[contestant].solved[problem] = std::make_pair(0, false);
+
+                if (status == 'I') {
+                    m[contestant].solved[problem].first = 20;
+                    m[contestant].solved[problem].second = false;
+                    //std::cout << "Adding I problem, with time: " << data.solved[problem].first << '\n';
+                }
+                if (status == 'C') {
+                    m[contestant].solved[problem].first = time;
+                    m[contestant].solved[problem].second = true;
+                }
+                if (status != 'I' || status != 'C') {
+                    //m[contestant].solved[problem] = std::make_pair(0, false);
+                }
+                //std::cout << "Pre check, current time: " << data.solved[problem].first << '\n';
+//                m[contestant] = data;
+                if (contestant == 1 && problem == 2) {
+                    // std::cout << "Post check, current time: " << m[contestant].solved[problem].first << '\n';
+                }
+            }
+            //std::cout << contestant << ":" << problem << ":" << time << ":" << status << '\n';
+        }
+
+        // Print out results for current test case
+        // Contestant# NumCorrectSubmissions TotalTime
+        std::vector<Contestant> arr;
+        auto it = m.begin();
+        while (it != m.end())
+        {
+            arr.push_back(it->second);
+            it++;
+        }
+
+        // Implement multi-field sort
+        std::sort(arr.begin(), arr.end() [&](const Contestant& c1, const Contestant& c2) {
+                
+            });
+
+        for (int j = 0; j < arr.size(); j++)
+        {
+            int totalTime = 0;
+            int totalSolved = 0;
+            auto iter = arr[j].solved.begin();
+            while (iter != arr[j].solved.end())
+            {
+                if (iter->second.second)
+                {
+                    // std::cout << "Problem solved = " << iter->first << " | " << iter->second.first << '\n';
+                    totalTime += iter->second.first;
+                    totalSolved++;
+                }
+                iter++;
+            }
+            std::cout << arr[j].contestantNumber << " " << totalSolved << " " << totalTime << '\n';
         }
 
         std::cout << '\n';
