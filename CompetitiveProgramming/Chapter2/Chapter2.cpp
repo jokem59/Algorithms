@@ -625,17 +625,31 @@ std::vector<std::string> splitString(const std::string& s, char delimiter) {
 
 struct Contestant {
     int contestantNumber;
+    int numSolved = 0;
+    int totalTime = 0;
     std::unordered_map<int, std::pair<int, bool>> solved;    // prob : { totalTime, solved }
 
     Contestant() {}
-    Contestant(const Contestant& c2) { contestantNumber = c2.contestantNumber; solved = c2.solved; }
+    Contestant(const Contestant& c2) { contestantNumber = c2.contestantNumber; solved = c2.solved; numSolved = c2.numSolved; totalTime = c2.totalTime;}
     ~Contestant() {}
+    void ComputeTotals()
+        {
+            // std::cout << "ComputeTotals() for ContestantNumber " << contestantNumber << '\n';
+            // for each
+            auto iter = solved.begin();
+            while (iter != solved.end())
+            {
+                if (iter->second.second)
+                {
+                    // std::cout << "Problem solved = " << iter->first << " | " << iter->second.first << '\n';
+                    totalTime += iter->second.first;
+                    numSolved++;
+                }
+                iter++;
+            }
+            return;
+        }
 };
-
-bool compareData(const Contestant& d1, const Contestant& d2) {
-
-    return false;
-}
 
 /* COSTLY MISTAKE _ LET THIS BE A LESSON OF NOT THINKING THROUGH SOLUTION BEFORE STARTING TO CODE
    CODED OUT MOST OF THE PROBLEM WHEN I (STUPIDLY) REALIZED I SHOULD'VE USED VECTOR INSTEAD OF
@@ -749,30 +763,43 @@ void contestScoreboard() {
             it++;
         }
 
+        for (int j = 0; j < arr.size(); j++)
+        {
+            arr[j].ComputeTotals();
+        }
+
         // Implement multi-field sort
-        std::sort(arr.begin(), arr.end() [&](const Contestant& c1, const Contestant& c2) {
-                
+        std::sort(arr.begin(), arr.end(), [&](const Contestant& c1, const Contestant& c2) {
+                if (c1.numSolved > c2.numSolved)
+                {
+                    return true;
+                }
+                if (c1.numSolved == c2.numSolved)
+                {
+                    if (c1.totalTime < c2.totalTime)
+                    {
+                        return true;
+                    }
+                    if (c1.totalTime == c2.totalTime)
+                    {
+                        if (c1.contestantNumber < c2.contestantNumber)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                return false;
             });
 
         for (int j = 0; j < arr.size(); j++)
         {
-            int totalTime = 0;
-            int totalSolved = 0;
-            auto iter = arr[j].solved.begin();
-            while (iter != arr[j].solved.end())
-            {
-                if (iter->second.second)
-                {
-                    // std::cout << "Problem solved = " << iter->first << " | " << iter->second.first << '\n';
-                    totalTime += iter->second.first;
-                    totalSolved++;
-                }
-                iter++;
-            }
-            std::cout << arr[j].contestantNumber << " " << totalSolved << " " << totalTime << '\n';
+            std::cout << arr[j].contestantNumber << " " << arr[j].numSolved << " " << arr[j].totalTime << '\n';
         }
 
-        std::cout << '\n';
+        if (i == numCases - 1)
+        { }
+        else
+            std::cout << '\n';
     }
 
     return;
