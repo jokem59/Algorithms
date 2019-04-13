@@ -805,8 +805,18 @@ void contestScoreboard() {
     return;
 }
 
+// UVa 10264 The Most Potent Corner - bit manipulation
+// Neigbors are one bit flip per bit
+// e.g. 000 neighbors = 001, 010, 100
+// e.g. 100 neighbors = 101, 110, 000
+void potentCorner()
+{
+    
+    return;
+}
+
 int main() {
     std::ios::sync_with_stdio(false);
-    contestScoreboard();
+    potentCorner();
     return 0;
 }
