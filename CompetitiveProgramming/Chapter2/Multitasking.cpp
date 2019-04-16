@@ -30,43 +30,23 @@ int main()
     bitset<SIZE> time;
     while (cin >> m >> n)
     {
+        // cout << "m: " << m << " n: " << n << '\n';
+        if (m == 0 && n == 0)
+            break;
 
         bool conflict = false;
         time.reset();
-        // cout << "m: " << m << " n: " << n << '\n';
-        if (m == 0 && n ==0)
-            break;
 
         int start, stop, period;
         for (int i = 0; i < m; i++)
         {
             cin >> start >> stop;
 
-            if (start > stop)
-                break;
-            stop = min(stop, SIZE);
+            if (stop >= SIZE)
+                stop = SIZE - 1;
 
-            time.set(start);
-            for (int j = start + 1; j < stop; j++)
+            if (!conflict)
             {
-                if (time.test(j))
-                    conflict = true;
-
-                time.set(j);
-            }
-        }
-
-        for (int i = 0; i < n; i++)
-        {
-            cin >> start >> stop >> period;
-
-            if (start > stop)
-                break;
-
-            while (start < SIZE)
-            {
-                stop = min(stop, SIZE);
-
                 time.set(start);
                 for (int j = start + 1; j < stop; j++)
                 {
@@ -75,16 +55,43 @@ int main()
 
                     time.set(j);
                 }
-
-                start += period;
-                stop += period;
             }
+
+        }
+
+        for (int i = 0; i < n; i++)
+        {
+            cin >> start >> stop >> period;
+
+            if (!conflict)
+            {
+                while (start < SIZE)
+                {
+                    if (stop >= SIZE)
+                        stop = SIZE - 1;
+
+                    time.set(start);
+                    for (int j = start + 1; j <= stop; j++)
+                    {
+                        if (time.test(j))
+                            conflict = true;
+
+                        time.set(j);
+                    }
+
+                    start += period;
+                    stop += period;
+                }
+            }
+
         }
 
         if (conflict)
             cout << "CONFLICT\n";
         else
             cout << "NO CONFLICT\n";
+
+        // cout << time;
     }
 
     return 0;
