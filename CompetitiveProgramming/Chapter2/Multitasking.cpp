@@ -20,78 +20,78 @@
 #define SIZE 1000001
 using namespace std;
 
+bool checkCollisionAndMarkInterval(bitset<SIZE>& time, int start, int end)
+{
+    if (end >= SIZE)
+        end = SIZE - 1;
+
+    for (int i = start + 1; i <= end; i++)
+    {
+        if (time.test(i))
+            return false;
+        else
+            time.set(i);
+    }
+
+    return true;
+}
+
+bool checkCollisionAndMarkRepeatedInterval(bitset<SIZE>& time, int start, int end, int period)
+{
+    while (start < SIZE)
+    {
+        if (end >= SIZE)
+            end = SIZE - 1;
+
+        bool noConflict = checkCollisionAndMarkInterval(time, start, end);
+        if (!noConflict)
+            return false;
+
+        start += period;
+        end += period;
+    }
+
+    return true;
+}
+
 // UVa 11926 Multitasking
 int main()
 {
     ios_base::sync_with_stdio(false);
 
-    // cout << "SIZE: " << SIZE << '\n';
-    int m, n;
     bitset<SIZE> time;
-    while (cin >> m >> n)
+    int numNormal, numRepeated, start, end, period;
+
+    while (1)
     {
-        // cout << "m: " << m << " n: " << n << '\n';
-        if (m == 0 && n == 0)
+        cin >> numNormal >> numRepeated;
+        if (numNormal == 0 && numRepeated == 0)
             break;
 
-        bool conflict = false;
         time.reset();
 
-        int start, stop, period;
-        for (int i = 0; i < m; i++)
+        bool noConflict = true;
+
+        for (int i = 0; i < numNormal; i++)
         {
-            cin >> start >> stop;
+            cin >> start >> end;
 
-            if (stop >= SIZE)
-                stop = SIZE - 1;
-
-            if (!conflict)
-            {
-                time.set(start);
-                for (int j = start + 1; j < stop; j++)
-                {
-                    if (time.test(j))
-                        conflict = true;
-
-                    time.set(j);
-                }
-            }
-
+            if (noConflict)
+                noConflict = checkCollisionAndMarkInterval(time, start, end);
         }
 
-        for (int i = 0; i < n; i++)
+        for (int i = 0; i < numRepeated; i++)
         {
-            cin >> start >> stop >> period;
+            cin >> start >> end >> period;
 
-            if (!conflict)
-            {
-                while (start < SIZE)
-                {
-                    if (stop >= SIZE)
-                        stop = SIZE - 1;
-
-                    time.set(start);
-                    for (int j = start + 1; j <= stop; j++)
-                    {
-                        if (time.test(j))
-                            conflict = true;
-
-                        time.set(j);
-                    }
-
-                    start += period;
-                    stop += period;
-                }
-            }
-
+            if (noConflict)
+                noConflict = checkCollisionAndMarkRepeatedInterval(time, start, end, period);
         }
 
-        if (conflict)
-            cout << "CONFLICT\n";
-        else
+        if (noConflict)
             cout << "NO CONFLICT\n";
-
-        // cout << time;
+        else
+            cout << "CONFLICT\n";
     }
 
     return 0;
