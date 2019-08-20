@@ -1,17 +1,19 @@
 #include <iostream>
 #include <string>
+#include <list>
 #include <vector>
+#include <iterator>
 
 using namespace std;
 
 struct TestCase
 {
-    string str;
+    list<char> str;
     int k;
-    string out;
+    list<char> out;
 };
 
-string LargestSubsequenceGivenK(string str, int k)
+string LargestSubsequenceGivenKString(string str, int k)
 {
     int numDelete = str.size() - k;
     int numPopped = 0;
@@ -42,16 +44,54 @@ string LargestSubsequenceGivenK(string str, int k)
     return str;
 }
 
+void LargestSubsequenceGivenK(list<char>& str, int k)
+{
+    int numDelete = str.size() - k;
+    int numPopped = 0;
+    list<char>::iterator it = str.begin();
+
+    while (numPopped < numDelete)
+    {
+        if (it == prev(str.end()))
+        {
+            str.erase(it);
+            numPopped++;
+            it--;
+        }
+        else if (*it < *(next(it)))
+        {
+            str.erase(it);
+            numPopped++;
+            if (it != str.begin())
+            {
+                it--;
+            }
+        }
+        else
+        {
+            it++;
+        }
+    }
+    return;
+}
+
 int main()
 {
-    vector<TestCase> tests { {"500301", 3, "531"},
-                             {"123456", 4, "3456"},
-                             {"71800000", 4, "8000"},
-                             {"654321", 2, "65"} };
+    vector<TestCase> tests { { {'5','0','3','0','1'}, 3, {'5','3','1'} },
+                             { {'1','2','3','4','5','6'}, 4, {'3','4','5','6'} },
+                             { {'6','5','4','3','2','1'}, 2, {'6','5'} },
+                             { {'7','1','8','0','0','0','0','0'}, 4, {'8','0','0','0'} } };
 
-    for (const TestCase& t : tests)
+
+    for (TestCase& t : tests)
     {
-        cout << LargestSubsequenceGivenK(t.str, t.k).compare(t.out) << '\n';
+        LargestSubsequenceGivenK(t.str, t.k);
+
+        for (list<char>::iterator it = t.str.begin(); it != t.str.end(); it++)
+        {
+            cout << *it;
+        }
+        cout << '\n';
     }
 
     return 0;
