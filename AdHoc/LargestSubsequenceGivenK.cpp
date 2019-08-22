@@ -54,13 +54,13 @@ void LargestSubsequenceGivenK(list<char>& str, int k)
     {
         if (it == prev(str.end()))
         {
-            str.erase(it);
+            it = str.erase(it);
             numPopped++;
             it--;
         }
         else if (*it < *(next(it)))
         {
-            str.erase(it);
+            it = str.erase(it);
             numPopped++;
             if (it != str.begin())
             {
