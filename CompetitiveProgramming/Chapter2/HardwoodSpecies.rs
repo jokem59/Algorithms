@@ -1,4 +1,4 @@
-use std::io;
+use std::io::{self, BufRead};
 #[allow(unused_imports)]
 use std::str;
 #[allow(unused_imports)]
@@ -63,7 +63,7 @@ use std::collections::BTreeMap;
 //
 // Explain how clone() achieves this.
 //
-// Make comments on unwrap().
+// Make comments on unwrap() -> https://doc.rust-lang.org/rust-by-example/error/option_unwrap.html
 //
 // Make comments on what read_line() is actually parsing (newline chars?)
 //
@@ -71,35 +71,45 @@ use std::collections::BTreeMap;
 
 fn main() {
     let mut input = String::new();
-    io::stdin().read_line(&mut input).unwrap();
-    println!("Num test cases: {} | Char count: {}", input, input.chars().count());
-    let num_cases: u32 = input.trim().parse::<u32>().unwrap();
-    println!("Integer num cases: {}", num_cases);
+    let stdin = io::stdin();
 
-    for _i in 0..num_cases {
-        let mut tree_map = BTreeMap::new();
-        let mut total: f32 = 0.0;
-
-        loop {
-            io::stdin().read_line(&mut input).unwrap();
-            println!("{}", input);
-            if input.len() == 0 { break; }
-
-            if !tree_map.contains_key(&input) {
-                tree_map.insert(input.clone(), 1);
-            }
-            else {
-                if let Some(count) = tree_map.get_mut(&input) {
-                    *count += 1;
-                }
-            }
-            total += 1.0;
-        }
-
-        for (key, val) in &tree_map {
-            println!("{} {}", key, (*val as f32) / total * 100.0);
-        }
+    for line in stdin.lock().lines() {
+        println!("Line: {}", line.unwrap());
     }
+
+    // println!("Num test cases: {} | Char count: {}", input, input.chars().count());
+    // let num_cases: u32 = input.trim().parse::<u32>().unwrap();
+    // println!("Integer num cases: {}", num_cases);
+
+    // for _i in 0..num_cases {
+    //     let mut tree_map = BTreeMap::new();
+    //     let mut total: f32 = 0.0;
+
+    //     loop {
+    //         let bytes = match io::stdin().read_line(&mut input) {
+    //             Ok(num) => println!("Returned {} bytes", num),
+    //             Err(_) => break,
+    //             };
+
+    //         input.trim();
+    //         println!("{}", input);
+    //         if input.chars().count() == 0 { break; }
+
+    //         if !tree_map.contains_key(&input) {
+    //             tree_map.insert(input.clone(), 1);
+    //         }
+    //         else {
+    //             if let Some(count) = tree_map.get_mut(&input) {
+    //                 *count += 1;
+    //             }
+    //         }
+    //         total += 1.0;
+    //     }
+
+    //     for (key, val) in &tree_map {
+    //         println!("{} {}", key, (*val as f32) / total * 100.0);
+    //     }
+    // }
 }
 
 
