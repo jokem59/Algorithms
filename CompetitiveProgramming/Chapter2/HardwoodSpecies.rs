@@ -1,8 +1,42 @@
-use std::io::{self, BufRead};
+use std::io::{self, BufWriter, Read, BufReader, BufRead, stdin, stdout, Write};
+use std::error::Error;
 #[allow(unused_imports)]
 use std::str;
 #[allow(unused_imports)]
 use std::collections::BTreeMap;
+
+struct Input<B> {
+    inner: B,
+    buffer: String,
+}
+impl<B: BufRead> Input<B> {
+    pub fn new(inner: B) -> Self {
+        Self {
+            inner,
+            buffer: String::new(),
+        }
+    }
+    pub fn line(&mut self) -> Line {
+        self.buffer.clear();
+        self.inner.read_line(&mut self.buffer).unwrap();
+        Line {
+            split: self.buffer.split_whitespace()
+        }
+    }
+}
+struct Line<'a> {
+    split: std::str::SplitWhitespace<'a>
+}
+impl<'a> Line<'a> {
+    fn next(&mut self) -> u32 {
+        self.split.next().unwrap().parse().unwrap()
+    }
+    fn pair(&mut self) -> (u32, u32) {
+        let a = self.next();
+        let b = self.next();
+        (a, b)
+    }
+}
 
 // Iteration 0: Below implementation returns the following
 //
@@ -67,19 +101,32 @@ use std::collections::BTreeMap;
 //
 // Make comments on what read_line() is actually parsing (newline chars?)
 //
-// Comment on String::len() vs String::chars().count()
+    // Comment on String::len() vs String::chars().count()
+    // Comment on Default()
+    // Comment on impl keyword
+
+// With the implmented Scanner, you're reading Stdin to fill up a vec, then querying the vec
+
+fn print_by_line<T: Read>(reader: T) -> io::Result<()> {
+    let buffer = BufReader::new(reader);
+    for line in buffer.lines() {
+        println!("{}", line?)
+    }
+    Ok(())
+}
 
 fn main() {
-    let mut input = String::new();
-    let stdin = io::stdin();
+    print_by_line(io::stdin())
+        .expect("Could not read from stdin");
 
-    for line in stdin.lock().lines() {
-        println!("Line: {}", line.unwrap());
+    let buffer = BufReader::new(io::stdin());
+    let mut input_iter = buffer.lines();
+    input_iter.next();
+    input_iter.next();
+
+    for line in input_iter {
+        println!("{:?}", line);
     }
-
-    // println!("Num test cases: {} | Char count: {}", input, input.chars().count());
-    // let num_cases: u32 = input.trim().parse::<u32>().unwrap();
-    // println!("Integer num cases: {}", num_cases);
 
     // for _i in 0..num_cases {
     //     let mut tree_map = BTreeMap::new();
